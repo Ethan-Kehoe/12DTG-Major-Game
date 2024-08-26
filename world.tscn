@@ -1,0 +1,59 @@
+[gd_scene load_steps=11 format=3 uid="uid://mvpcff14dini"]
+
+[ext_resource type="Script" path="res://world.gd" id="1_80cvf"]
+[ext_resource type="Texture2D" uid="uid://br3ce2podyvka" path="res://ezgif-3-4ae4f6c63b-jpg/ezgif-frame-001.jpg" id="1_fqk5h"]
+[ext_resource type="PackedScene" uid="uid://bhm4a16m6f3fp" path="res://player.tscn" id="102_80346"]
+[ext_resource type="PackedScene" uid="uid://tfjjq6lfqyks" path="res://enemy.tscn" id="103_oxko8"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_4vs3r"]
+vertices = PackedVector3Array(7.6552, 0.5, -9.22742, 7.6552, 0.5, -14.7274, -5.3448, 0.5, -14.9774, -6.0948, 0.5, 6.52258, -6.0948, 0.5, 14.7726, 6.9052, 0.5, 15.0226)
+polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(3, 0, 4), PackedInt32Array(4, 0, 5)]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jnwxd"]
+albedo_texture = ExtResource("1_fqk5h")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_o0q5p"]
+material = SubResource("StandardMaterial3D_jnwxd")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ttbg8"]
+
+[sub_resource type="Environment" id="Environment_d7bct"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_5litr"]
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_80cvf")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.999772, 0.00655854, 0.0203194, -0.00652935, 0.999978, -0.00150245, -0.0203288, 0.00136944, 0.999792, 0.00524807, 3.41808, 11.2361)
+fov = 97.2183
+near = 0.001
+
+[node name="Node3D" parent="." instance=ExtResource("103_oxko8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.91481, 0.880515, -0.854603)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_4vs3r")
+
+[node name="Platform" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(6.90231, 0, -0.433526, 0, 0.356983, 0, 0.195813, 0, 15.2816, 0.74104, 0, 0)
+mesh = SubResource("PlaneMesh_o0q5p")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Platform"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Platform/StaticBody3D"]
+transform = Transform3D(2.0722, 0, 2.23517e-08, 0, 1, 0, -5.58794e-09, 0, 1.94767, 0, 0, 0)
+shape = SubResource("BoxShape3D_ttbg8")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_d7bct")
+camera_attributes = SubResource("CameraAttributesPractical_5litr")
+
+[node name="player" parent="." instance=ExtResource("102_80346")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.284896, 0.178492, 13.9391)
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="player"]
+
+[node name="target" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.26145, 0, 14.504)
